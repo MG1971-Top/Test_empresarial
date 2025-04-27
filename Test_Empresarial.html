@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluación Megacable Empresarial</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://www.megacable.com.mx/images/mega_white.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: rgba(255, 255, 255, 0.8);
+            background-blend-mode: lighten;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            z-index: 10;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1, h2 {
+            color: #1c3f94;
+        }
+
+        .btn {
+            background-color: #1c3f94;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #163073;
+        }
+
+        .option {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .correct {
+            background-color: #c8e6c9;
+            border: 2px solid #2e7d32;
+        }
+
+        .incorrect {
+            background-color: #ffcdd2;
+            border: 2px solid #c62828;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Megacable_logo.png" alt="Logotipo Megacable" class="logo">
+
+    <div class="container" id="start-screen">
+        <h1>Bienvenido al Test de Megacable Empresarial</h1>
+        <p>Evalúa tus conocimientos. ¡Buena suerte!</p>
+        <button class="btn" onclick="startQuiz()">Iniciar Evaluación</button>
+    </div>
+
+    <div class="container hidden" id="quiz-container">
+        <h2 id="question-title">Pregunta</h2>
+        <div id="options"></div>
+    </div>
+
+    <div class="container hidden" id="result-screen">
+        <h1>¡Evaluación Finalizada!</h1>
+        <h2 id="final-score">Tu puntaje: 0</h2>
+        <p>¡Gracias por tu participación!</p>
+        <button class="btn" onclick="restartQuiz()">Volver a intentar</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Qué servicio NO ofrece Megacable Empresarial?",
+                options: [
+                    "Internet de alta velocidad",
+                    "Telefonía fija",
+                    "Servicios de ciberseguridad",
+                    "Televisión por cable",
+                    "Alquiler de autos"
+                ],
+                answer: 4
+            },
+            {
+                question: "¿Cuál es la velocidad máxima de Internet que ofrece Megacable Empresarial?",
+                options: [
+                    "100 Mbps",
+                    "500 Mbps",
+                    "1 Gbps",
+                    "10 Mbps",
+                    "50 Mbps"
+                ],
+                answer: 2
+            },
+            {
+                question: "¿Qué solución de telefonía empresarial ofrece Megacable?",
+                options: [
+                    "Telefonía satelital",
+                    "Telefonía VoIP",
+                    "Telefonía móvil 5G",
+                    "Fax por Internet",
+                    "Videollamadas automáticas"
+                ],
+                answer: 1
+            },
+            {
+                question: "¿Qué significa la sigla VPN en los servicios empresariales de Megacable?",
+                options: [
+                    "Virtual Private Network",
+                    "Very Public Network",
+                    "Variable Protection Network",
+                    "Verified Private Node",
+                    "Video Program Network"
+                ],
+                answer: 0
+            },
+            {
+                question: "¿En qué sectores se enfoca principalmente Megacable Empresarial?",
+                options: [
+                    "Hogar y entretenimiento",
+                    "Empresas, educación y gobierno",
+                    "Salud y farmacéutica",
+                    "Industria automotriz",
+                    "Solo PyMES"
+                ],
+                answer: 1
+            },
+            {
+                question: "¿Cuál es un beneficio de los servicios empresariales de Megacable?",
+                options: [
+                    "Internet ilimitado con velocidad garantizada",
+                    "Acceso gratuito a Netflix",
+                    "Descuento en boletos de cine",
+                    "Cursos online gratuitos",
+                    "Membresía de gimnasio incluida"
+                ],
+                answer: 0
+            },
+            {
+                question: "¿Cuál es el horario de atención para soporte empresarial de Megacable?",
+                options: [
+                    "Solo lunes a viernes",
+                    "24/7 (todos los días, todo el día)",
+                    "De 8 am a 5 pm",
+                    "Solo fines de semana",
+                    "Lunes a viernes hasta las 10 pm"
+                ],
+                answer: 1
+            },
+            {
+                question: "¿Qué servicio ofrece Megacable para interconectar varias sucursales?",
+                options: [
+                    "Redes privadas empresariales",
+                    "Puntos WiFi públicos",
+                    "Antenas de televisión",
+                    "Servidores domésticos",
+                    "Aplicaciones móviles"
+                ],
+                answer: 0
+            },
+            {
+                question: "¿Qué distingue a Megacable en su servicio empresarial?",
+                options: [
+                    "Alta disponibilidad y estabilidad",
+                    "Internet solo en horarios de oficina",
+                    "Cobertura exclusiva en zonas rurales",
+                    "Servicios exclusivamente móviles",
+                    "Precios más altos que la competencia"
+                ],
+                answer: 0
+            },
+            {
+                question: "¿Cuál es un canal de contacto para empresas en Megacable?",
+                options: [
+                    "Centro de ayuda en WhatsApp",
+                    "Fax tradicional",
+                    "Telegram",
+                    "SMS",
+                    "Correo tradicional"
+                ],
+                answer: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('question-title').innerText = question.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = "";
+
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerText = option;
+                btn.onclick = () => selectOption(index);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex) {
+            const question = questions[currentQuestion];
+            const optionsDiv = document.getElementById('options');
+            const buttons = optionsDiv.getElementsByClassName('option');
+
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = true;
+                if (i === question.answer) {
+                    buttons[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === question.answer) {
+                score += 10;
+            } else {
+                buttons[selectedIndex].classList.add('incorrect');
+            }
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = `Tu puntaje: ${score}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
